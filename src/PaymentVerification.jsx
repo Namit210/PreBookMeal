@@ -10,7 +10,7 @@ export default function PaymentVerification() {
         <div>
             <div style={headingStyle}>Payment Verification</div>
             <ul>
-                <li>After payment please send the screenshot of the payment confirmation to our admin at +91 8077871623</li>
+                <li>After payment please send the screenshot of the payment confirmation to our admin at +91 9748005891</li>
                 <li>Your booking will be confirmed once the payment screenshot is verified by our admin.</li>
             </ul>
         </div>

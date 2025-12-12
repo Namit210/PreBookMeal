@@ -54,7 +54,7 @@ export default function PrivacyPolicy() {
       <section style={sectionStyle}>
         <h2 style={subHeadingStyle}>7. Contact Us</h2>
         <p>If you have any questions about this Privacy Policy, please contact us:</p>
-        <p>Phone: +91 8077871623</p>
+        <p>Phone: +91 9748005891</p>
         <p>Address: Kalyani</p>
       </section>
     </div>

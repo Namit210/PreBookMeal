@@ -28,9 +28,9 @@ const BookingForm = () => {
   };
 
   const mealDeadlines = {
-    breakfast: { hour: 6, minute: 0, label: '6:00 AM' },
+    breakfast: { hour: 7, minute: 0, label: '7:00 AM' },
     lunch: { hour: 10, minute: 0, label: '10:00 AM' },
-    dinner: { hour: 16, minute: 0, label: '4:00 PM' }
+    dinner: { hour: 18, minute: 0, label: '6:00 PM' }
   };
 
   const checkDeadline = (selectedDate, mealType) => {
@@ -184,9 +184,32 @@ const BookingForm = () => {
 
   return (
     <>
-      <Card heading='Seamless Meal Pre-Booking' img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
-        <p>Plan your meals ahead and enjoy delicious, freshly prepared food without the wait. Quick, easy and convenient pre-orders for breakfast, lunch and dinner.</p>
-        <button style={{backgroundColor:'#7170d3ff', color:'white', padding:'0.75rem 1.5rem', border:'none', borderRadius:'5px', cursor:'pointer', fontSize:'1rem', fontWeight:'600', margin:'1rem 0 0 0'}} onClick={handleBookNowClick}>
+      <style>{`
+        @media (max-width: 768px) {
+          .book-meal-btn {
+            width: 100% !important;
+            text-align: center;
+          }
+        }
+      `}</style>
+      <Card heading='Ananda Bazar Mahaprasad Booking' img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
+        <p>Partake in the Lord’s divine remnants, a timeless tradition of bliss and spiritual fulfillment. Prepared with utmost purity and devotion in the temple kitchen.</p>
+        <button 
+          className="book-meal-btn"
+          style={{
+            backgroundColor:'#7170d3ff', 
+            color:'white', 
+            padding:'0.75rem 1.5rem', 
+            border:'none', 
+            borderRadius:'5px', 
+            cursor:'pointer', 
+            fontSize:'1rem', 
+            fontWeight:'600', 
+            margin:'1rem 0 0 0',
+            display: 'block'
+          }} 
+          onClick={handleBookNowClick}
+        >
           Book Your Meal Now
         </button>
       </Card>
@@ -260,9 +283,9 @@ const BookingForm = () => {
                 
               >
                 <option value="">Select meal type</option>
-                <option value="breakfast">Breakfast (₹60)</option>
-                <option value="lunch">Lunch (₹90)</option>
-                <option value="dinner">Dinner (₹60)</option>
+                <option value="Breakfast">Breakfast (₹60)</option>
+                <option value="Lunch">Lunch (₹90)</option>
+                <option value="Dinner">Dinner (₹60)</option>
               </select>
               {errors.mealType && <span className="error">{errors.mealType}</span>}
             </div>

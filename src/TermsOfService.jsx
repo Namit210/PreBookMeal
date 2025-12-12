@@ -14,9 +14,9 @@ export default function TermsOfService() {
         <ul style={listStyle}>
           <li><strong>Booking Deadlines:</strong> To book a meal, you must place your booking before the following deadlines:
             <ul style={{...listStyle, marginTop: '0.5rem'}}>
-              <li>Breakfast: Must be booked before 6:00 AM on the meal date</li>
+              <li>Breakfast: Must be booked before 7:00 AM on the meal date</li>
               <li>Lunch: Must be booked before 10:00 AM on the meal date</li>
-              <li>Dinner: Must be booked before 4:00 PM on the meal date</li>
+              <li>Dinner: Must be booked before 6:00 PM on the meal date</li>
             </ul>
           </li>
           <li><strong>Booking Confirmation:</strong> Your booking is subject to confirmation by the admin</li>
@@ -75,13 +75,14 @@ export default function TermsOfService() {
       <section style={sectionStyle}>
         <h2 style={subHeadingStyle}>9. Contact Information</h2>
         <p>For questions or concerns about these Terms of Service, please contact us:</p>
-        <p>Phone: +91 8077871623</p>
-        <p>Address: Kalyani</p>
+        <p>Phone: +91 9748005891</p>
+        <p>Address: ISKCON Kalyani (B9/63 Kalyani)</p>
       </section>
 
       <section style={sectionStyle}>
         <p style={{fontStyle: 'italic', color: '#666'}}>
-          Hare Krishna! Thank you for using Mahaprasadam booking service.
+          Hare Krishna Hare Krishna Krishna Krishna Hare Hare <br />
+          Hare Rama Hare Rama Rama Rama Hare Hare
         </p>
       </section>
     </div>

@@ -46,7 +46,7 @@ export default function Rule(){
             </Notes>
             <div
             style={{fontWeight:'bold', fontSize:'20px', paddingLeft:'1.5rem', color:'#3e41e4ff'}}
-            >Admin Phone: +91 8077871623</div>
+            >Admin Phone: +91 9748005891</div>
         </div>
         </div>
     )

@@ -10,12 +10,12 @@ export default function BookingConfirmation() {
     const headingStyle ={
                 color: '#220303ff',
                 margin: '3rem 0 1rem 0',
-                fontSize: '2.3rem',
+                fontSize: 'clamp(1.5rem, 5vw, 2.3rem)',
                 fontWeight: 'bold'
             }
 
     const headingStyle2 ={
-               fontSize: '1.5rem',
+               fontSize: 'clamp(1.2rem, 4vw, 1.5rem)',
         fontWeight: 'bold',
         marginBottom: '1rem',
         color: '#220303ff'
@@ -24,7 +24,7 @@ export default function BookingConfirmation() {
     const subtitleStyle = {
                 color: '#555',
                 margin: '0 0 2rem 0',
-                fontSize: '1rem'
+                fontSize: 'clamp(0.875rem, 2.5vw, 1rem)'
             }
 
     const informationStyle={
@@ -37,9 +37,35 @@ export default function BookingConfirmation() {
     }
     return (
         < div >
+        <style>{`
+            @media (max-width: 768px) {
+                .confirmation-container {
+                    width: 95% !important;
+                    padding: 0 0.5rem !important;
+                }
+                .confirmation-content {
+                    flex-direction: column !important;
+                }
+                .payment-container {
+                    width: 100% !important;
+                    margin-top: 0 !important;
+                    order: -1;
+                }
+                .book-detail-mobile {
+                    width: 100% !important;
+                    padding: 10px 0 !important;
+                    margin-top: 2rem;
+                }
+                .confirmation-button {
+                    width: 100% !important;
+                    padding: 1rem !important;
+                    font-size: 1rem !important;
+                }
+            }
+        `}</style>
         <div style={{textAlign:'center'}}>
            <div style={headingStyle}>
-             Booking Confirmed
+             Confirm Your Booking
             </div>
             <p style={subtitleStyle}>
                 Thank you for booking your meal at Mahaprasadam. Please follow the instructions below to complete your payment
@@ -47,10 +73,10 @@ export default function BookingConfirmation() {
             </div>
 
             <div className="confirmation-container" style={{width:'80%',margin:'2rem auto'}}>
-               <div style={{display:'flex'}}>
-                <BookDetail mealType={mealType} date={date} time={time} numberOfPeople={persons} customerName={name} phoneNumber={phone} totalAmount={totalAmount} style={{width:'50%', padding:'10px'}}/>
+               <div className="confirmation-content" style={{display:'flex'}}>
+                <BookDetail mealType={mealType} date={date} time={time} numberOfPeople={persons} customerName={name} phoneNumber={phone} totalAmount={totalAmount} style={{width:'50%', padding:'10px'}} className="book-detail-mobile"/>
                 <div className="payment-container" style={{width:'50%'}} >
-                    <Qr />
+                    <Qr totalAmount={totalAmount} />
                     <PaymentVerification />
                 </div>
             </div>
@@ -67,8 +93,9 @@ export default function BookingConfirmation() {
                 </div>
                 <div style={{textAlign:'center'}}>
                     <button onClick={handleBack}
+                     className="confirmation-button"
                      style={
-                        {backgroundColor:'blue', alignItems:'center', color:'white'}
+                        {backgroundColor:'blue', alignItems:'center', color:'white', padding:'0.75rem 2rem', border:'none', borderRadius:'5px', cursor:'pointer', fontSize:'1rem'}
                 }>Understood, continue to Home</button>
                 </div>
             </div>
