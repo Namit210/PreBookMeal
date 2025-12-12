@@ -12,7 +12,7 @@ const NavBar = () => {
           <li><Link to="/help" style={linkStyles}>Rules & Help</Link></li>
         </ul>
         <div>
-          Admin Login
+          <Link to="/admin-panel" style={linkStyles}>Admin Panel</Link>
         </div>
       </div>
     </nav>
