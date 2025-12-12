@@ -6,6 +6,8 @@ export default function Confirmed(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [unconfirmingId, setUnconfirmingId] = useState(null);
+    const [selectedBookings, setSelectedBookings] = useState([]);
+    const [isUnconfirmingBatch, setIsUnconfirmingBatch] = useState(false);
 
     useEffect(() => {
         fetchConfirmedBookings();
@@ -43,6 +45,51 @@ export default function Confirmed(){
             console.error('Error unconfirming booking:', err);
         } finally {
             setUnconfirmingId(null);
+        }
+    };
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedBookings(bookings.map(b => b.booking_id));
+        } else {
+            setSelectedBookings([]);
+        }
+    };
+
+    const handleSelectBooking = (bookingId) => {
+        setSelectedBookings(prev => {
+            if (prev.includes(bookingId)) {
+                return prev.filter(id => id !== bookingId);
+            } else {
+                return [...prev, bookingId];
+            }
+        });
+    };
+
+    const handleUnconfirmSelected = async () => {
+        if (selectedBookings.length === 0) {
+            alert('Please select at least one booking to unconfirm.');
+            return;
+        }
+
+        if (isUnconfirmingBatch) return;
+
+        try {
+            setIsUnconfirmingBatch(true);
+            await unconfirmBooking(selectedBookings);
+            
+            // Add a small delay for better UX
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Refresh the bookings list and clear selection
+            await fetchConfirmedBookings();
+            setSelectedBookings([]);
+            alert(`${selectedBookings.length} booking(s) unconfirmed successfully!`);
+        } catch (err) {
+            alert('Failed to unconfirm bookings: ' + err.message);
+            console.error('Error unconfirming bookings:', err);
+        } finally {
+            setIsUnconfirmingBatch(false);
         }
     };
 
@@ -85,10 +132,48 @@ export default function Confirmed(){
             )}
             
             {!loading && !error && bookings.length > 0 && (
-            <div style={{overflowY:'auto', maxHeight:'500px'}}>
+                <>
+                <div style={{marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center'}}>
+                    <button 
+                        className="btn-primary"
+                        onClick={handleUnconfirmSelected}
+                        disabled={selectedBookings.length === 0 || isUnconfirmingBatch}
+                        style={{
+                            opacity: selectedBookings.length === 0 || isUnconfirmingBatch ? 0.6 : 1,
+                            cursor: selectedBookings.length === 0 || isUnconfirmingBatch ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        {isUnconfirmingBatch ? 'Unconfirming...' : `Unconfirm Selected (${selectedBookings.length})`}
+                    </button>
+                    {selectedBookings.length > 0 && (
+                        <button 
+                            className="btn-secondary"
+                            onClick={() => setSelectedBookings([])}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                backgroundColor: '#6c757d',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Clear Selection
+                        </button>
+                    )}
+                </div>
+                <div style={{overflowY:'auto', maxHeight:'500px'}}>
                 <table style={{borderCollapse:'collapse', width:'100%'}}>
                     <thead>
                     <tr>
+                        <th style={tableHeadStyle}>
+                            <input 
+                                type="checkbox"
+                                checked={selectedBookings.length === bookings.length && bookings.length > 0}
+                                onChange={handleSelectAll}
+                                style={{cursor: 'pointer'}}
+                            />
+                        </th>
                         <th style={tableHeadStyle}>Booking ID</th>
                         <th style={tableHeadStyle}>Customer Name</th>
                         <th style={tableHeadStyle}>Phone</th>
@@ -98,12 +183,19 @@ export default function Confirmed(){
                         <th style={tableHeadStyle}>Persons</th>
                         <th style={tableHeadStyle}>Total Amount</th>
                         <th style={tableHeadStyle}>Payment Status</th>
-                        <th style={tableHeadStyle}>Unconfirm</th>
                     </tr>
                     </thead>
                     <tbody>
                         {bookings.slice().reverse().map((booking, index) => (
                             <tr key={booking.booking_id || index}>
+                                <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>
+                                    <input 
+                                        type="checkbox"
+                                        checked={selectedBookings.includes(booking.booking_id)}
+                                        onChange={() => handleSelectBooking(booking.booking_id)}
+                                        style={{cursor: 'pointer'}}
+                                    />
+                                </td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>{booking.booking_id}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>{booking.name}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>{booking.phone}</td>
@@ -113,24 +205,12 @@ export default function Confirmed(){
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>{booking.persons}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>Rs. {parseFloat(booking.total_amount || 0).toFixed(2)}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>{booking.status}</td>
-                                <td  style={{padding:'10px', border:'1px solid black', textAlign:'center'}}>
-                                    <button 
-                                        className="btn-primary"
-                                        onClick={() => handleUnconfirm(booking.booking_id)}
-                                        disabled={unconfirmingId !== null}
-                                        style={{
-                                            opacity: unconfirmingId === booking.booking_id ? 0.6 : 1,
-                                            cursor: unconfirmingId !== null ? 'not-allowed' : 'pointer'
-                                        }}
-                                    >
-                                        {unconfirmingId === booking.booking_id ? 'Unconfirming...' : 'Unconfirm'}
-                                    </button>
-                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            </>
             )}
         </div>
     )

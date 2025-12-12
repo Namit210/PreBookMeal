@@ -114,7 +114,7 @@ export const getBookingById = async (bookingId) => {
 export const updateBookingStatus = async (bookingId, status) => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/bookings/${bookingId}/status`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -135,17 +135,21 @@ export const updateBookingStatus = async (bookingId, status) => {
 };
 
 /**
- * Confirm a booking using the dedicated confirm endpoint
- * @param {string} bookingId - Booking ID
- * @returns {Promise} Updated booking
+ * Confirm a booking or multiple bookings using the batch confirm endpoint
+ * @param {string|string[]} bookingIds - Single booking ID or array of booking IDs
+ * @returns {Promise} Updated bookings
  */
-export const confirmBooking = async (bookingId) => {
+export const confirmBooking = async (bookingIds) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bookings/${bookingId}/confirm`, {
+    // Convert single ID to array
+    const ids = Array.isArray(bookingIds) ? bookingIds : [bookingIds];
+    
+    const response = await fetch(`${API_BASE_URL}/api/bookings/confirm`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ booking_ids: ids }),
     });
     
     const data = await response.json();
@@ -162,17 +166,21 @@ export const confirmBooking = async (bookingId) => {
 };
 
 /**
- * Unconfirm a booking (set back to pending) using the dedicated pending endpoint
- * @param {string} bookingId - Booking ID
- * @returns {Promise} Updated booking
+ * Unconfirm a booking or multiple bookings (set back to pending) using the batch pending endpoint
+ * @param {string|string[]} bookingIds - Single booking ID or array of booking IDs
+ * @returns {Promise} Updated bookings
  */
-export const unconfirmBooking = async (bookingId) => {
+export const unconfirmBooking = async (bookingIds) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bookings/${bookingId}/pending`, {
+    // Convert single ID to array
+    const ids = Array.isArray(bookingIds) ? bookingIds : [bookingIds];
+    
+    const response = await fetch(`${API_BASE_URL}/api/bookings/pending`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ booking_ids: ids }),
     });
     
     const data = await response.json();
