@@ -3,10 +3,12 @@ import './BookingForm.css';
 import Card from './Card';
 import meal from './assets/Mahaprasad-Thali.webp'
 import { useNavigate } from 'react-router-dom';
+import { createBooking } from './api/bookingService';
 
 const BookingForm = () => {
   const navigate = useNavigate();
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -110,7 +112,7 @@ const BookingForm = () => {
 
   
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -121,21 +123,47 @@ const BookingForm = () => {
       return;
     }
 
-    // Navigate to confirmation page with booking data
-    navigate('/confirm', {
-      state: {
-          bookingId: `BKG${Date.now()}`,
-          name: formData.name,
-          phone: formData.phone,
-          date: formData.date,
-          mealType: formData.mealType,
-          persons: formData.persons,
-          totalAmount: mealPrices[formData.mealType] * formData.persons,
-          time:new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-          status: 'confirmed'
-        
-      }
-    });
+    setIsSubmitting(true);
+
+    try {
+      // Calculate total amount
+      const totalAmount = mealPrices[formData.mealType] * formData.persons;
+
+      // Prepare booking data
+      const bookingData = {
+        name: formData.name,
+        phone: formData.phone,
+        date: formData.date,
+        mealType: formData.mealType,
+        persons: formData.persons,
+        totalAmount: totalAmount,
+        bookingTime: new Date().toISOString()
+      };
+
+      // Call API to create booking
+      const response = await createBooking(bookingData);
+
+      // Navigate to confirmation page with booking data
+      navigate('/confirm', {
+        state: {
+          bookingId: response.booking.booking_id,
+          name: response.booking.name,
+          phone: response.booking.phone,
+          date: response.booking.date,
+          mealType: response.booking.meal_type,
+          persons: response.booking.persons,
+          totalAmount: response.booking.total_amount,
+          time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+          status: response.booking.status,
+          savedToSheets: response.saved_to_sheets
+        }
+      });
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      alert('Failed to create booking: ' + error.message + '\nPlease try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const totalAmount = formData.mealType 
@@ -292,9 +320,9 @@ const BookingForm = () => {
               <button 
                 type="submit" 
                 className="btn btn-primary btn-block"
-  
+                disabled={isSubmitting || !!deadlineError}
               >
-                Book Now  
+                {isSubmitting ? 'Booking...' : 'Book Now'}
               </button>
             </>
         </form>
