@@ -48,13 +48,11 @@ export default function BookingConfirmation() {
                 }
                 .payment-container {
                     width: 100% !important;
-                    margin-top: 0 !important;
-                    order: -1;
+                    margin-top: 2rem !important;
                 }
                 .book-detail-mobile {
                     width: 100% !important;
                     padding: 10px 0 !important;
-                    margin-top: 2rem;
                 }
                 .confirmation-button {
                     width: 100% !important;
