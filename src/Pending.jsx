@@ -298,7 +298,7 @@ export default function Pending(){
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.phone}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.meal_type}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.date}</td>
-                                <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.booking_time ? new Date(booking.booking_time).toLocaleTimeString() : 'N/A'}</td>
+                                <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.created_at ? new Date(booking.created_at).toLocaleTimeString() : 'N/A'}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.persons}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>Rs. {parseFloat(booking.total_amount || 0).toFixed(2)}</td>
                                 <td style={{padding:'10px', border:'1px solid black', textAlign:'center', fontSize: 'clamp(0.75rem, 2vw, 0.9rem)'}}>{booking.status}</td>
@@ -354,7 +354,7 @@ export default function Pending(){
                             </div>
                             <div style={cardRowStyle}>
                                 <span style={cardLabelStyle}>Time:</span>
-                                <span style={cardValueStyle}>{booking.booking_time ? new Date(booking.booking_time).toLocaleTimeString() : 'N/A'}</span>
+                                <span style={cardValueStyle}>{booking.created_at ? new Date(booking.created_at).toLocaleTimeString() : 'N/A'}</span>
                             </div>
                             <div style={cardRowStyle}>
                                 <span style={cardLabelStyle}>Persons:</span>
