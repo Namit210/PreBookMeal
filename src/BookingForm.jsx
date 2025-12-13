@@ -61,8 +61,17 @@ const BookingForm = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Convert persons to number
-    const processedValue = name === 'persons' ? parseInt(value) || 1 : value;
+    // Handle persons field - allow empty for editing, but store as number
+    let processedValue = value;
+    if (name === 'persons') {
+      // Allow empty string during editing
+      if (value === '') {
+        processedValue = '';
+      } else {
+        const num = parseInt(value);
+        processedValue = isNaN(num) ? 1 : Math.max(1, num);
+      }
+    }
     
     setFormData(prev => ({
       ...prev,
@@ -130,8 +139,11 @@ const BookingForm = () => {
     setIsSubmitting(true);
 
     try {
+      // Ensure persons is a valid number
+      const persons = formData.persons === '' ? 1 : parseInt(formData.persons);
+      
       // Calculate total amount
-      const totalAmount = mealPrices[formData.mealType] * formData.persons;
+      const totalAmount = mealPrices[formData.mealType] * persons;
 
       // Prepare booking data
       const bookingData = {
@@ -139,7 +151,7 @@ const BookingForm = () => {
         phone: formData.phone,
         date: formData.date,
         mealType: formData.mealType,
-        persons: formData.persons,
+        persons: persons,
         totalAmount: totalAmount,
         bookingTime: new Date().toISOString()
       };
@@ -171,7 +183,7 @@ const BookingForm = () => {
   };
 
   const totalAmount = formData.mealType 
-    ? mealPrices[formData.mealType] * formData.persons 
+    ? mealPrices[formData.mealType] * (formData.persons || 1)
     : 0;
 
   const today = new Date().toISOString().split('T')[0];
