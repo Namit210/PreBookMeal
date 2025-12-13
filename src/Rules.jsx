@@ -24,7 +24,7 @@ export default function Rule(){
             <Notes heading='Special Booking Arrangements' type='disc'>
             {
                 {
-                    "Off-time Bookings":"For reservations outside regular hours, please contact our admin at +1234567890 to make special arrangements.",
+                    "Off-time Bookings":"For reservations outside regular hours, please contact our admin at +91 9748005891 to make special arrangements.",
                     "Cash Bookings":"We facilitate cash bookings, which will be verified upon your arrival at the temple.",
                 }
             }
