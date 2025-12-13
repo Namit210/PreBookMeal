@@ -196,7 +196,7 @@ const BookingForm = () => {
           }
         }
       `}</style>
-      <Card heading='Ananda Bazar Mahaprasad Booking' img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
+      <Card heading='Ananda Bazaar Mahaprasad Booking' img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
         <p>Partake in the Lord’s divine remnants, a timeless tradition of bliss and spiritual fulfillment. Prepared with utmost purity and devotion in the temple kitchen.</p>
         <button 
           className="book-meal-btn"
