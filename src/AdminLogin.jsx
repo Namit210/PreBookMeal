@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Dashboard from './Dashboard';
 
-const ADMIN_PASSWORD = 'password'; // Change this to your desired password
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
