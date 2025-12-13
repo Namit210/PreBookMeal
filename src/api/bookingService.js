@@ -1,42 +1,54 @@
-// API base URL - configured via environment variable
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+import { supabase } from '../supabaseClient';
 
 /**
- * Create a new booking with payment screenshot
- * @param {Object} bookingData - Booking form data
- * @param {File} screenshot - Payment screenshot file
- * @returns {Promise} API response
+ * Generate a unique booking ID
+ * @returns {string} Booking ID in format BOOK-YYYYMMDD-XXXXX
  */
-export const createBooking = async (bookingData, screenshot) => {
+const generateBookingId = () => {
+  const date = new Date();
+  const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+  const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+  return `BOOK-${dateStr}-${random}`;
+};
+
+/**
+ * Create a new booking
+ * @param {Object} bookingData - Booking form data
+ * @returns {Promise} Booking data
+ */
+export const createBooking = async (bookingData) => {
   try {
-    const formData = new FormData();
-    
-    // Append all booking data
-    formData.append('name', bookingData.name);
-    formData.append('phone', bookingData.phone);
-    formData.append('date', bookingData.date);
-    formData.append('mealType', bookingData.mealType);
-    formData.append('persons', bookingData.persons);
-    formData.append('totalAmount', bookingData.totalAmount);
-    formData.append('bookingTime', bookingData.bookingTime || new Date().toISOString());
-    
-    // Append screenshot file
-    if (screenshot) {
-      formData.append('screenshot', screenshot);
+    const bookingId = generateBookingId();
+
+    // Insert booking into database
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert([
+        {
+          booking_id: bookingId,
+          name: bookingData.name,
+          phone: bookingData.phone,
+          date: bookingData.date,
+          meal_type: bookingData.mealType,
+          persons: bookingData.persons,
+          total_amount: bookingData.totalAmount,
+          status: 'pending',
+          payment_status: 'not_paid',
+          created_at: new Date().toISOString()
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message || 'Failed to create booking');
     }
-    
-    const response = await fetch(`${API_BASE_URL}/api/bookings`, {
-      method: 'POST',
-      body: formData,
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to create booking');
-    }
-    
-    return data;
+
+    return {
+      success: true,
+      message: 'Booking created successfully',
+      booking: data
+    };
   } catch (error) {
     console.error('Error creating booking:', error);
     throw error;
@@ -50,28 +62,32 @@ export const createBooking = async (bookingData, screenshot) => {
  */
 export const getAllBookings = async (filters = {}) => {
   try {
-    const queryParams = new URLSearchParams();
-    
-    if (filters.phone) queryParams.append('phone', filters.phone);
-    if (filters.date) queryParams.append('date', filters.date);
-    if (filters.status) queryParams.append('status', filters.status);
-    
-    const url = `${API_BASE_URL}/api/bookings${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch bookings');
+    let query = supabase
+      .from('bookings')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    // Apply filters if provided
+    if (filters.phone) {
+      query = query.eq('phone', filters.phone);
     }
-    
-    return data;
+    if (filters.date) {
+      query = query.eq('date', filters.date);
+    }
+    if (filters.status) {
+      query = query.eq('status', filters.status);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw new Error(error.message || 'Failed to fetch bookings');
+    }
+
+    return {
+      success: true,
+      bookings: data
+    };
   } catch (error) {
     console.error('Error fetching bookings:', error);
     throw error;
@@ -83,22 +99,27 @@ export const getAllBookings = async (filters = {}) => {
  * @param {string} bookingId - Booking ID
  * @returns {Promise} Booking details
  */
+/**
+ * Get a specific booking by ID
+ * @param {string} bookingId - Booking ID
+ * @returns {Promise} Booking details
+ */
 export const getBookingById = async (bookingId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bookings/${bookingId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch booking');
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('booking_id', bookingId)
+      .single();
+
+    if (error) {
+      throw new Error(error.message || 'Failed to fetch booking');
     }
-    
-    return data;
+
+    return {
+      success: true,
+      booking: data
+    };
   } catch (error) {
     console.error('Error fetching booking:', error);
     throw error;
@@ -113,21 +134,22 @@ export const getBookingById = async (bookingId) => {
  */
 export const updateBookingStatus = async (bookingId, status) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bookings/${bookingId}/status`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status }),
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to update booking status');
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq('booking_id', bookingId)
+      .select()
+      .single();
+
+    if (error) {
+      throw new Error(error.message || 'Failed to update booking status');
     }
-    
-    return data;
+
+    return {
+      success: true,
+      message: 'Booking status updated successfully',
+      booking: data
+    };
   } catch (error) {
     console.error('Error updating booking status:', error);
     throw error;
@@ -135,7 +157,7 @@ export const updateBookingStatus = async (bookingId, status) => {
 };
 
 /**
- * Confirm a booking or multiple bookings using the batch confirm endpoint
+ * Confirm a booking or multiple bookings
  * @param {string|string[]} bookingIds - Single booking ID or array of booking IDs
  * @returns {Promise} Updated bookings
  */
@@ -143,22 +165,22 @@ export const confirmBooking = async (bookingIds) => {
   try {
     // Convert single ID to array
     const ids = Array.isArray(bookingIds) ? bookingIds : [bookingIds];
-    
-    const response = await fetch(`${API_BASE_URL}/api/bookings/confirm`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ booking_ids: ids }),
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to confirm booking');
+
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status: 'confirmed', updated_at: new Date().toISOString() })
+      .in('booking_id', ids)
+      .select();
+
+    if (error) {
+      throw new Error(error.message || 'Failed to confirm booking(s)');
     }
-    
-    return data;
+
+    return {
+      success: true,
+      message: `Successfully confirmed ${data.length} booking(s)`,
+      bookings: data
+    };
   } catch (error) {
     console.error('Error confirming booking:', error);
     throw error;
@@ -166,7 +188,7 @@ export const confirmBooking = async (bookingIds) => {
 };
 
 /**
- * Unconfirm a booking or multiple bookings (set back to pending) using the batch pending endpoint
+ * Unconfirm a booking or multiple bookings (set back to pending)
  * @param {string|string[]} bookingIds - Single booking ID or array of booking IDs
  * @returns {Promise} Updated bookings
  */
@@ -174,22 +196,22 @@ export const unconfirmBooking = async (bookingIds) => {
   try {
     // Convert single ID to array
     const ids = Array.isArray(bookingIds) ? bookingIds : [bookingIds];
-    
-    const response = await fetch(`${API_BASE_URL}/api/bookings/pending`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ booking_ids: ids }),
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to unconfirm booking');
+
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status: 'pending', updated_at: new Date().toISOString() })
+      .in('booking_id', ids)
+      .select();
+
+    if (error) {
+      throw new Error(error.message || 'Failed to unconfirm booking(s)');
     }
-    
-    return data;
+
+    return {
+      success: true,
+      message: `Successfully unconfirmed ${data.length} booking(s)`,
+      bookings: data
+    };
   } catch (error) {
     console.error('Error unconfirming booking:', error);
     throw error;
@@ -203,20 +225,19 @@ export const unconfirmBooking = async (bookingIds) => {
  */
 export const deleteBooking = async (bookingId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bookings/${bookingId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to delete booking');
+    const { error } = await supabase
+      .from('bookings')
+      .delete()
+      .eq('booking_id', bookingId);
+
+    if (error) {
+      throw new Error(error.message || 'Failed to delete booking');
     }
-    
-    return data;
+
+    return {
+      success: true,
+      message: 'Booking deleted successfully'
+    };
   } catch (error) {
     console.error('Error deleting booking:', error);
     throw error;

@@ -22,15 +22,15 @@ const BookingForm = () => {
   const [deadlineError, setDeadlineError] = useState('');
 
   const mealPrices = {
-    breakfast: 60,
-    lunch: 90,
-    dinner: 60
+    Breakfast: 60,
+    Lunch: 90,
+    Dinner: 60
   };
 
   const mealDeadlines = {
-    breakfast: { hour: 7, minute: 0, label: '7:00 AM' },
-    lunch: { hour: 10, minute: 0, label: '10:00 AM' },
-    dinner: { hour: 18, minute: 0, label: '6:00 PM' }
+    Breakfast: { hour: 7, minute: 0, label: '7:00 AM' },
+    Lunch: { hour: 10, minute: 0, label: '10:00 AM' },
+    Dinner: { hour: 18, minute: 0, label: '6:00 PM' }
   };
 
   const checkDeadline = (selectedDate, mealType) => {
@@ -60,9 +60,13 @@ const BookingForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Convert persons to number
+    const processedValue = name === 'persons' ? parseInt(value) || 1 : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }));
 
     // Check deadline when date or meal type changes

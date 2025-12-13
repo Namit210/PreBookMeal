@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllBookings, unconfirmBooking } from "./api/bookingService";
+import { getAllBookings, unconfirmBooking, deleteBooking } from "./api/bookingService";
 
 export default function Confirmed(){
     const [bookings, setBookings] = useState([]);
@@ -8,6 +8,7 @@ export default function Confirmed(){
     const [unconfirmingId, setUnconfirmingId] = useState(null);
     const [selectedBookings, setSelectedBookings] = useState([]);
     const [isUnconfirmingBatch, setIsUnconfirmingBatch] = useState(false);
+    const [isDeletingBatch, setIsDeletingBatch] = useState(false);
 
     useEffect(() => {
         fetchConfirmedBookings();
@@ -90,6 +91,40 @@ export default function Confirmed(){
             console.error('Error unconfirming bookings:', err);
         } finally {
             setIsUnconfirmingBatch(false);
+        }
+    };
+
+    const handleDeleteSelected = async () => {
+        if (selectedBookings.length === 0) {
+            alert('Please select at least one booking to delete.');
+            return;
+        }
+
+        const confirmDelete = window.confirm(`Are you sure you want to delete ${selectedBookings.length} booking(s)? This action cannot be undone.`);
+        if (!confirmDelete) return;
+
+        if (isDeletingBatch) return;
+
+        try {
+            setIsDeletingBatch(true);
+            
+            // Delete bookings one by one
+            for (const bookingId of selectedBookings) {
+                await deleteBooking(bookingId);
+            }
+            
+            // Add a small delay for better UX
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Refresh the bookings list and clear selection
+            await fetchConfirmedBookings();
+            setSelectedBookings([]);
+            alert(`${selectedBookings.length} booking(s) deleted successfully!`);
+        } catch (err) {
+            alert('Failed to delete bookings: ' + err.message);
+            console.error('Error deleting bookings:', err);
+        } finally {
+            setIsDeletingBatch(false);
         }
     };
 
@@ -176,15 +211,32 @@ export default function Confirmed(){
                     <button 
                         className="btn-primary"
                         onClick={handleUnconfirmSelected}
-                        disabled={selectedBookings.length === 0 || isUnconfirmingBatch}
+                        disabled={selectedBookings.length === 0 || isUnconfirmingBatch || isDeletingBatch}
                         style={{
-                            opacity: selectedBookings.length === 0 || isUnconfirmingBatch ? 0.6 : 1,
-                            cursor: selectedBookings.length === 0 || isUnconfirmingBatch ? 'not-allowed' : 'pointer',
+                            opacity: selectedBookings.length === 0 || isUnconfirmingBatch || isDeletingBatch ? 0.6 : 1,
+                            cursor: selectedBookings.length === 0 || isUnconfirmingBatch || isDeletingBatch ? 'not-allowed' : 'pointer',
                             fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                             padding: '0.5rem 1rem'
                         }}
                     >
                         {isUnconfirmingBatch ? 'Unconfirming...' : `Unconfirm Selected (${selectedBookings.length})`}
+                    </button>
+                    <button 
+                        className="btn-danger"
+                        onClick={handleDeleteSelected}
+                        disabled={selectedBookings.length === 0 || isUnconfirmingBatch || isDeletingBatch}
+                        style={{
+                            opacity: selectedBookings.length === 0 || isUnconfirmingBatch || isDeletingBatch ? 0.6 : 1,
+                            cursor: selectedBookings.length === 0 || isUnconfirmingBatch || isDeletingBatch ? 'not-allowed' : 'pointer',
+                            fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+                            padding: '0.5rem 1rem',
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px'
+                        }}
+                    >
+                        {isDeletingBatch ? 'Deleting...' : `Delete Selected (${selectedBookings.length})`}
                     </button>
                     {selectedBookings.length > 0 && (
                         <button 

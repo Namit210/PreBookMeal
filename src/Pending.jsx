@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllBookings, confirmBooking } from "./api/bookingService";
+import { getAllBookings, confirmBooking, deleteBooking } from "./api/bookingService";
 
 export default function Pending(){
     const [bookings, setBookings] = useState([]);
@@ -8,6 +8,7 @@ export default function Pending(){
     const [confirmingId, setConfirmingId] = useState(null);
     const [selectedBookings, setSelectedBookings] = useState([]);
     const [isConfirmingBatch, setIsConfirmingBatch] = useState(false);
+    const [isDeletingBatch, setIsDeletingBatch] = useState(false);
 
     useEffect(() => {
         fetchPendingBookings();
@@ -90,6 +91,40 @@ export default function Pending(){
             console.error('Error confirming bookings:', err);
         } finally {
             setIsConfirmingBatch(false);
+        }
+    };
+
+    const handleDeleteSelected = async () => {
+        if (selectedBookings.length === 0) {
+            alert('Please select at least one booking to delete.');
+            return;
+        }
+
+        const confirmDelete = window.confirm(`Are you sure you want to delete ${selectedBookings.length} booking(s)? This action cannot be undone.`);
+        if (!confirmDelete) return;
+
+        if (isDeletingBatch) return;
+
+        try {
+            setIsDeletingBatch(true);
+            
+            // Delete bookings one by one
+            for (const bookingId of selectedBookings) {
+                await deleteBooking(bookingId);
+            }
+            
+            // Add a small delay for better UX
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Refresh the bookings list and clear selection
+            await fetchPendingBookings();
+            setSelectedBookings([]);
+            alert(`${selectedBookings.length} booking(s) deleted successfully!`);
+        } catch (err) {
+            alert('Failed to delete bookings: ' + err.message);
+            console.error('Error deleting bookings:', err);
+        } finally {
+            setIsDeletingBatch(false);
         }
     };
 
@@ -176,15 +211,32 @@ export default function Pending(){
                     <button 
                         className="btn-primary"
                         onClick={handleConfirmSelected}
-                        disabled={selectedBookings.length === 0 || isConfirmingBatch}
+                        disabled={selectedBookings.length === 0 || isConfirmingBatch || isDeletingBatch}
                         style={{
-                            opacity: selectedBookings.length === 0 || isConfirmingBatch ? 0.6 : 1,
-                            cursor: selectedBookings.length === 0 || isConfirmingBatch ? 'not-allowed' : 'pointer',
+                            opacity: selectedBookings.length === 0 || isConfirmingBatch || isDeletingBatch ? 0.6 : 1,
+                            cursor: selectedBookings.length === 0 || isConfirmingBatch || isDeletingBatch ? 'not-allowed' : 'pointer',
                             fontSize: 'clamp(0.875rem, 2vw, 1rem)',
                             padding: '0.5rem 1rem'
                         }}
                     >
                         {isConfirmingBatch ? 'Confirming...' : `Confirm Selected (${selectedBookings.length})`}
+                    </button>
+                    <button 
+                        className="btn-danger"
+                        onClick={handleDeleteSelected}
+                        disabled={selectedBookings.length === 0 || isConfirmingBatch || isDeletingBatch}
+                        style={{
+                            opacity: selectedBookings.length === 0 || isConfirmingBatch || isDeletingBatch ? 0.6 : 1,
+                            cursor: selectedBookings.length === 0 || isConfirmingBatch || isDeletingBatch ? 'not-allowed' : 'pointer',
+                            fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+                            padding: '0.5rem 1rem',
+                            backgroundColor: '#dc3545',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px'
+                        }}
+                    >
+                        {isDeletingBatch ? 'Deleting...' : `Delete Selected (${selectedBookings.length})`}
                     </button>
                     {selectedBookings.length > 0 && (
                         <button 
