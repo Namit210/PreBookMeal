@@ -1,4 +1,8 @@
+import { useTranslation } from "react-i18next";
+
 export default function PaymentVerification() {
+
+    const t = useTranslation().t;
         const headingStyle={
         fontSize: '1.5rem',
         fontWeight: 'bold',
@@ -8,10 +12,10 @@ export default function PaymentVerification() {
     };
     return (
         <div>
-            <div style={headingStyle}>Payment Verification</div>
+            <div style={headingStyle}>{t("Payment Verification")}</div>
             <ul>
-                <li>After payment please send the screenshot of the payment confirmation to our admin at +91 9748005891</li>
-                <li>Your booking will be confirmed once the payment screenshot is verified by our admin.</li>
+                <li>{t("After payment please send the screenshot of the payment confirmation to our admin at")} +91 9748005891</li>
+                <li>{t("Your booking will be confirmed once the payment screenshot is verified by our admin.")}</li>
             </ul>
         </div>
     );

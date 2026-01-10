@@ -1,6 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export default function Footer(){
+
+    const t = useTranslation().t
+
     return(
         <>
             <style>{`
@@ -43,28 +47,29 @@ export default function Footer(){
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     letterSpacing: '0.5px',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    maxWidth: '150px'
                 }}>
-                    Sri Sri <br />Jagannath Dham
+                    {t("Jagannath")}
                 </div>
-                <FootList heading='Quick Links' className="footer-section" style={{margin:'0 3rem 0 0'}}>
+                <FootList heading={t('Quick Links')} className="footer-section" style={{margin:'0 3rem 0 0'}}>
                     {[
-                        { text: 'Book Meal', link: '/' },
-                        { text: 'Rules & Help', link: '/help' },
-                        { text: 'Admin Panel', link: '/admin-panel' }
+                        { text: t('Book Meal'), link: '/' },
+                        { text: t('rules'), link: '/help' },
+                        { text: t('Admin Panel'), link: '/admin-panel' }
                     ]}
                 </FootList>
                
-                <FootList heading='Contact Us' className="footer-section" style={{margin:'0 0 0 3rem'}}>
+                <FootList heading={t('Contact Us')} className="footer-section" style={{margin:'0 0 0 3rem'}}>
                     {[
-                        { text: 'Phone: +91 9748005891', link: null },
-                        { text: 'Address: ISKCON Kalyani (B9/63 Kalyani)', link: null }
+                        { text: t('Phone: +91 9748005891'), link: null },
+                        { text: t('Address'), link: null }
                     ]}
                 </FootList>
-                <FootList heading='Legal' className="footer-section">
+                <FootList heading={t('Legal')} className="footer-section">
                     {[
-                        { text: 'Privacy Policy', link: '/privacy-policy' },
-                        { text: 'Terms of Service', link: '/terms-of-service' }
+                        { text: t('Privacy Policy'), link: '/privacy-policy' },
+                        { text: t('Terms of Service'), link: '/terms-of-service' }
                     ]}
                 </FootList>
                    

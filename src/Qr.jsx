@@ -1,6 +1,10 @@
 import { QRCodeSVG } from 'qrcode.react';
+import { useTranslation } from "react-i18next";
 
 export default function Qr({totalAmount}){
+
+    const t = useTranslation().t;
+
     const upiLink = `upi://pay?pa=jagan89613j@barodampay&pn=JAGANNATH%20DHAM%20KALYANI&am=${totalAmount}`;
     
     const headingStyle={
@@ -52,7 +56,7 @@ export default function Qr({totalAmount}){
             }
         `}</style>
         <div className="qr-container">
-            <div className="qr-heading" style={headingStyle}>Scan for QR Payment</div>
+            <div className="qr-heading" style={headingStyle}>{t("Scan for QR Payment")}</div>
             <div className="qr-image" style={imageStyle}>
                 <QRCodeSVG value={upiLink} size={200} level="H" />
             </div>
@@ -60,11 +64,11 @@ export default function Qr({totalAmount}){
                 <span style={{color:'blue'}}>UPI ID: jagan89613j@barodampay</span>
             </div>
             <div className="qr-info" style={{marginBottom: '1rem'}}>
-                Scan this QR code with your preferrd payment app to complete your payment.
+                {t("Scan this QR code with your preferrd payment app to complete your payment.")}
             </div>
             <div className="mobile-pay-button">
                 <a href={upiLink} style={{textDecoration: 'none'}}>
-                    <button style={buttonStyle}>Pay on Mobile</button>
+                    <button style={buttonStyle}>{t("Pay on Mobile")}</button>
                 </a>
             </div>
         </div>

@@ -10,6 +10,7 @@ import AdminLogin from './AdminLogin'
 import ProtectedRoute from './ProtectedRoute'
 import PrivacyPolicy from './PrivacyPolicy'
 import TermsOfService from './TermsOfService'
+import './language-support/i18n.jsx'
 
 function App() {
   return (

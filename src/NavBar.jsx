@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from "react-i18next"
+import LanguageSwitcher from "./language-support/LanguageSwitcher";
 
 const NavBar = () => {
+
+  const t = useTranslation().t
+
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -36,24 +41,46 @@ const NavBar = () => {
           .mobile-menu { display: none !important; }
         }
       `}</style>
-      <div style={containerStyles}>
-        <div style={logoStyles}>
-          <Link to="/" style={{
-            ...brandStyles, 
-            fontFamily: "'Dancing Script', 'Brush Script MT', cursive", 
-            fontSize: '1.8rem', 
-            fontWeight: 'bold',
-            background: 'linear-gradient(135deg, #FF6B35, #F7931E, #FDC830)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-            letterSpacing: '0.5px'
-          }}>
-            Sri Sri Jagannath Dham
-          </Link>
+      <div style={{...containerStyles, gap: '1.5rem'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+          <div style={logoStyles}>
+            <Link to="/" style={{
+              ...brandStyles, 
+              fontFamily: "'Dancing Script', 'Brush Script MT', cursive", 
+              fontSize: '1.8rem', 
+              fontWeight: 'bold',
+              background: 'linear-gradient(135deg, #FF6B35, #F7931E, #FDC830)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+              letterSpacing: '0.5px'
+            }}>
+              {t("Jagannath")}
+            </Link>
+          </div>
+          {/* Show LanguageSwitcher only on mobile */}
+          <div className="mobile-language-switcher" style={{display: 'none'}}>
+            <LanguageSwitcher mobile={true} />
+          </div>
         </div>
-        
+
+        {/* Desktop Menu */}
+        <div className="desktop-menu" style={desktopMenuContainerStyles}>
+          <ul style={menuStyles}>
+            <li><Link to="/" style={linkStyles}>{t("booking")}</Link></li>
+            <li><Link to="/help" style={linkStyles}>{t("rules")}</Link></li>
+          </ul>
+        </div>
+
+        {/* Admin Panel and Language Switcher on the right */}
+        <div className="desktop-menu" style={{display: 'flex', alignItems: 'center', gap: '1rem', flex: '0 0 auto'}}>
+          <Link to="/admin-panel" style={linkStyles}>{t("Admin Panel")}</Link>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <LanguageSwitcher />
+          </div>
+        </div>
+
         {/* Hamburger Menu Button */}
         <button 
           className="mobile-menu-btn"
@@ -76,26 +103,13 @@ const NavBar = () => {
             </svg>
           )}
         </button>
-
-        {/* Desktop Menu */}
-        <div className="desktop-menu" style={desktopMenuContainerStyles}>
-          <ul style={menuStyles}>
-            <li><Link to="/" style={linkStyles}>Book Meal</Link></li>
-            <li><Link to="/help" style={linkStyles}>Rules & Help</Link></li>
-          </ul>
-        </div>
-
-        {/* Admin Panel on the right */}
-        <div className="desktop-menu" style={{flex: '0 0 auto'}}>
-          <Link to="/admin-panel" style={linkStyles}>Admin Panel</Link>
-        </div>
       </div>
 
       {/* Mobile Menu */}
       <div className="mobile-menu">
         <Link to="/" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>Book Meal</Link>
         <Link to="/help" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>Rules & Help</Link>
-        <Link to="/admin-panel" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>Admin Panel</Link>
+        <Link to="/admin-panel" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>{t("Admin Panel")}</Link>
       </div>
     </nav>
   );
@@ -107,6 +121,23 @@ const navStyles = {
   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   position: 'relative'
 };
+
+// Responsive: show mobile-language-switcher only on mobile
+const styleTag = document.createElement('style');
+styleTag.innerHTML = `
+  @media (max-width: 768px) {
+    .mobile-language-switcher { display: flex !important; align-items: center; }
+    .desktop-menu { display: none !important; }
+  }
+  @media (min-width: 769px) {
+    .mobile-language-switcher { display: none !important; }
+    .desktop-menu { display: flex !important; }
+  }
+`;
+if (!document.head.querySelector('style[data-mobile-language-switcher]')) {
+  styleTag.setAttribute('data-mobile-language-switcher', 'true');
+  document.head.appendChild(styleTag);
+}
 
 const containerStyles = {
   maxWidth: '1200px',

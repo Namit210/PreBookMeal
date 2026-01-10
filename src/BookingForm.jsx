@@ -4,8 +4,10 @@ import Card from './Card';
 import meal from './assets/Mahaprasad-Thali.webp'
 import { useNavigate } from 'react-router-dom';
 import { createBooking } from './api/bookingService';
+import { useTranslation } from 'react-i18next';
 
 const BookingForm = () => {
+  const t = useTranslation().t
   const navigate = useNavigate();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -208,8 +210,8 @@ const BookingForm = () => {
           }
         }
       `}</style>
-      <Card heading='Ananda Bazaar Mahaprasad Booking' img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
-        <p>Partake in the Lord’s divine remnants, a timeless tradition of bliss and spiritual fulfillment. Prepared with utmost purity and devotion in the temple kitchen.</p>
+      <Card heading={t("ananda-title")} img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
+        <p>{t("ananda-desc")}</p>
         <button 
           className="book-meal-btn"
           style={{
@@ -226,45 +228,45 @@ const BookingForm = () => {
           }} 
           onClick={handleBookNowClick}
         >
-          Book Your Meal Now
+          {t("Book-button-1")}
         </button>
       </Card>
       
        
         <div className="booking-container">
           <div className="booking-card">
-        <h1><strong>Book Your Meal</strong></h1>
-        <p className="subtitle">Jagannath Mahaprasadam</p>
+        <h1><strong>{t("Book Your Meal")}</strong></h1>
+        <p className="subtitle">{t("Jagannath Mahaprasadam")}</p>
 
         <form onSubmit={handleSubmit} >
           {/* User Details Section */}
           <div className="form-sections-wrapper">
           <div className="form-section">
-            <h2>Your Details</h2>
+            <h2>{t("Your Details")}</h2>
             
             <div className="form-group">
-              <label htmlFor="name">Full Name *</label>
+              <label htmlFor="name">{t("Full Name")} *</label>
               <input
                 type="text"
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Enter your full name"
+                placeholder={t("Enter your full name")}
           
               />
               {errors.name && <span className="error">{errors.name}</span>}
             </div>
 
             <div className="form-group">
-              <label htmlFor="phone">Phone Number *</label>
+              <label htmlFor="phone">{t("Phone Number")} *</label>
               <input
                 type="tel"
                 id="phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="10-digit mobile number"
+                placeholder={t("10-digit mobile number")}
         
               />
               {errors.phone && <span className="error">{errors.phone}</span>}
@@ -273,10 +275,10 @@ const BookingForm = () => {
 
           {/* Booking Details Section */}
           <div className="form-section">
-            <h2>Meal Details</h2>
+            <h2>{t("Meal Details")}</h2>
 
             <div className="form-group">
-              <label htmlFor="date">Select Date *</label>
+              <label htmlFor="date">{t("Select Date")} *</label>
               <input
                 type="date"
                 id="date"
@@ -290,7 +292,7 @@ const BookingForm = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="mealType">Meal Type *</label>
+              <label htmlFor="mealType">{t("Meal Type")} *</label>
               <select
                 id="mealType"
                 name="mealType"
@@ -298,10 +300,10 @@ const BookingForm = () => {
                 onChange={handleInputChange}
                 
               >
-                <option value="">Select meal type</option>
-                <option value="Breakfast">Breakfast (₹60)</option>
-                <option value="Lunch">Lunch (₹90)</option>
-                <option value="Dinner">Dinner (₹60)</option>
+                <option value="">{t("Select meal type")}</option>
+                <option value="Breakfast">{t("Breakfast")} (₹60)</option>
+                <option value="Lunch">{t("Lunch")} (₹90)</option>
+                <option value="Dinner">{t("Dinner")} (₹60)</option>
               </select>
               {errors.mealType && <span className="error">{errors.mealType}</span>}
             </div>
@@ -313,7 +315,7 @@ const BookingForm = () => {
             )}
               
             <div className="form-group">
-              <label htmlFor="persons">Number of Persons *</label>
+              <label htmlFor="persons">{t("Number of Persons")} *</label>
               <input
                 type="number"
                 id="persons"
@@ -331,15 +333,15 @@ const BookingForm = () => {
           {formData.mealType && (
             <div className="price-summary">
               <div className="price-row">
-                <span>Price per person:</span>
+                <span>{t("Price per person:")}</span>
                 <span>₹{mealPrices[formData.mealType]}</span>
               </div>
               <div className="price-row">
-                <span>Number of persons:</span>
+                <span>{t("Number of persons:")}</span>
                 <span>{formData.persons}</span>
               </div>
               <div className="price-row total">
-                <span>Total Amount:</span>
+                <span>{t("Total Amount:")}</span>
                 <span>₹{totalAmount}</span>
               </div>
             </div>
@@ -348,11 +350,11 @@ const BookingForm = () => {
           {/* Booking Deadlines Info */}
             <>
               <div className="deadline-info">
-                <h3>Booking Deadlines</h3>
+                <h3>{t("Booking Deadlines")}</h3>
                 <ul>
-                  <li><strong>Breakfast:</strong> Book before 7:00 AM</li>
-                  <li><strong>Lunch:</strong> Book before 10:00 AM</li>
-                  <li><strong>Dinner:</strong> Book before 6:00 PM</li>
+                  <li><strong>{t("Breakfast")}:</strong> {t("Book before time", {time:'7:00 AM'})}</li>
+                  <li><strong>{t("Lunch")}:</strong> {t("Book before time", {time:'10:00 AM'})}</li>
+                  <li><strong>{t("Dinner")}:</strong> {t("Book before time", {time:'6:00 PM'})}</li>
                 </ul>
               </div>
 
@@ -361,7 +363,7 @@ const BookingForm = () => {
                 className="btn btn-primary btn-block"
                 disabled={isSubmitting || !!deadlineError}
               >
-                {isSubmitting ? 'Booking...' : 'Book Now'}
+                {isSubmitting ? 'Booking...' : t('Book-button-2')}
               </button>
             </>
         </form>

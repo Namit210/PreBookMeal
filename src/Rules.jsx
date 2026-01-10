@@ -1,8 +1,11 @@
 import Notes from "./Notes.jsx";
 import rules from './assets/rule0.jpg';
 import Card from "./Card.jsx";
+import { useTranslation } from "react-i18next";
 
 export default function Rule(){
+
+    const t = useTranslation().t
 
     const imgstyle={
         margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'300px', objectFit:'contain', display:'block', borderRadius:'15px',boxShadow:'0 6px 10px rgba(39, 24, 24, 0.1)'
@@ -10,15 +13,16 @@ export default function Rule(){
 
     return(
         <div>
-            <Card heading='Rules & Help' img={rules} style={{justifyContent:'center', alignItems:'center', padding:'1rem 6rem'}} imgstyle={imgstyle}>
-                    <p>Understand our booking policies, meal cut-off times, and payment procedures to ensure a smooth and enjoyable experiance with Mahaprasadam.</p>
+            <Card heading={t('rules')} img={rules} style={{justifyContent:'center', alignItems:'center', padding:'1rem 6rem'}} imgstyle={imgstyle}>
+                    <p>{t("rules desc")}</p>
                     
                   </Card>
         <div style={{width:'80%', margin:'2rem auto'}}>
+            
             <Notes heading='Meal Booking Cut-off Times' type='disc'>
-                {{"Breakfast":"Booking closes daily at 7:00 AM",
-                  "Lunch":"Booking closes daily at 10:00 AM",
-                  "Dinner":"Booking closes daily at 6:00 PM",
+                {{"Breakfast":[t("Booking closes daily at time",{time:'7:00 AM'})],
+                  "Lunch":[t("Booking closes daily at time",{time:'10:00 AM'})],
+                  "Dinner":[t("Booking closes daily at time",{time:'6:00 PM'})],
                   "":"Please ensure your meal is booked before the respective cut-off time to guarantee your order."}}
             </Notes>
             <Notes heading='Special Booking Arrangements' type='disc'>
@@ -46,7 +50,7 @@ export default function Rule(){
             </Notes>
             <div
             style={{fontWeight:'bold', fontSize:'20px', paddingLeft:'1.5rem', color:'#3e41e4ff'}}
-            >Admin Phone: +91 9748005891</div>
+            >{t("Admin Phone")}: +91 9748005891</div>
         </div>
         </div>
     )

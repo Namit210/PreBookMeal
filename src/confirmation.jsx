@@ -1,12 +1,21 @@
+
 import { useLocation } from "react-router-dom";
 import BookDetail from "./BookDetail"
 import PaymentVerification from "./PaymentVerification"
 import Qr from "./Qr"
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+
 
 export default function BookingConfirmation() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    const t = useTranslation().t;
 
     const location = useLocation();
-    const {mealType, date, time, persons, name, phone, totalAmount} = location.state || {};
+    const {bookingId, mealType, date, time, persons, name, phone, totalAmount} = location.state || {};
     const headingStyle ={
                 color: '#220303ff',
                 margin: '3rem 0 1rem 0',
@@ -44,7 +53,7 @@ export default function BookingConfirmation() {
                     padding: 0 0.5rem !important;
                 }
                 .confirmation-content {
-                    flex-direction: column !important;
+                    flex-direction: column-reverse !important;
                 }
                 .payment-container {
                     width: 100% !important;
@@ -63,16 +72,17 @@ export default function BookingConfirmation() {
         `}</style>
         <div style={{textAlign:'center'}}>
            <div style={headingStyle}>
-             Confirm Your Booking
+             {t("Confirm Your Booking")}
             </div>
             <p style={subtitleStyle}>
-                Thank you for booking your meal at Mahaprasadam. Please follow the instructions below to complete your payment
+                {t("Thank you for booking your meal at Mahaprasadam. Please follow the instructions below to complete your payment")}
             </p>
             </div>
 
             <div className="confirmation-container" style={{width:'80%',margin:'2rem auto'}}>
                <div className="confirmation-content" style={{display:'flex'}}>
-                <BookDetail mealType={mealType} date={date} time={time} numberOfPeople={persons} customerName={name} phoneNumber={phone} totalAmount={totalAmount} style={{width:'50%', padding:'10px'}} className="book-detail-mobile"/>
+                {/* In mobile, QR will appear above booking details due to column-reverse */}
+                <BookDetail bookingId={bookingId} mealType={mealType} date={date} time={time} numberOfPeople={persons} customerName={name} phoneNumber={phone} totalAmount={totalAmount} style={{width:'50%', padding:'10px'}} className="book-detail-mobile"/>
                 <div className="payment-container" style={{width:'50%'}} >
                     <Qr totalAmount={totalAmount} />
                     <PaymentVerification />
@@ -80,13 +90,13 @@ export default function BookingConfirmation() {
             </div>
                 <div style={informationStyle}>
                     <div style={headingStyle2}>
-                        Important Information
+                        {t("Important Information")}
                     </div>
                     <div style={{color:'green', fontWeight:'bold', marginBottom:'1rem'}}>
-                        Please note: No refund available for any bookings.
+                        {t("Please note: No refund available for any bookings.")}
                     </div>
                     <div style={subtitleStyle}>
-                        For cash bookings, our admin will verify payment upon your arrival at the temple. Please ensure that you have the exact amount ready
+                        {t("For cash bookings, our admin will verify payment upon your arrival at the temple. Please ensure that you have the exact amount ready")}
                     </div>
                 </div>
                 <div style={{textAlign:'center'}}>
@@ -94,7 +104,7 @@ export default function BookingConfirmation() {
                      className="confirmation-button"
                      style={
                         {backgroundColor:'blue', alignItems:'center', color:'white', padding:'0.75rem 2rem', border:'none', borderRadius:'5px', cursor:'pointer', fontSize:'1rem'}
-                }>Understood, continue to Home</button>
+                }>{t("Understood, continue to Home")}</button>
                 </div>
             </div>
         </div>
