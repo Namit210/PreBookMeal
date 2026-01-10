@@ -1,61 +1,63 @@
+import { useTranslation } from "react-i18next";
 export default function PrivacyPolicy() {
+  const t = useTranslation().t;
   return (
     <div style={containerStyle}>
-      <h1 style={headingStyle}>Privacy Policy</h1>
-      <p style={dateStyle}>Last updated: December 12, 2025</p>
+      <h1 style={headingStyle}>{t("Privacy Policy")}</h1>
+      <p style={dateStyle}>{t("Last updated: December 12, 2025")}</p>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>1. Information We Collect</h2>
-        <p>When you book a meal through Mahaprasadam, we collect the following information:</p>
+        <h2 style={subHeadingStyle}>{t("1. Information We Collect")}</h2>
+        <p>{t("When you book a meal through Mahaprasadam, we collect the following information:")}</p>
         <ul style={listStyle}>
-          <li>Personal identification: Name</li>
-          <li>Contact information: Phone number</li>
-          <li>Booking details: Meal date, meal type (breakfast/lunch/dinner), number of persons</li>
+          <li>{t("Personal identification: Name")}</li>
+          <li>{t("Contact information: Phone number")}</li>
+          <li>{t("Booking details: Meal date, meal type (breakfast/lunch/dinner), number of persons")}</li>
         </ul>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>2. How We Use Your Information</h2>
-        <p>We use the collected information for:</p>
+        <h2 style={subHeadingStyle}>{t("2. How We Use Your Information")}</h2>
+        <p>{t("We use the collected information for:")}</p>
         <ul style={listStyle}>
-          <li>Processing and confirming your meal bookings</li>
-          <li>Contacting you regarding your booking status</li>
-          <li>Managing meal preparation and service</li>
-          <li>Improving our booking system and services</li>
+          <li>{t("Processing and confirming your meal bookings")}</li>
+          <li>{t("Contacting you regarding your booking status")}</li>
+          <li>{t("Managing meal preparation and service")}</li>
+          <li>{t("Improving our booking system and services")}</li>
         </ul>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>3. Data Storage and Security</h2>
-        <p>Your booking information is stored locally and securely. We implement appropriate security measures to protect your personal information from unauthorized access, alteration, or disclosure.</p>
+        <h2 style={subHeadingStyle}>{t("3. Data Storage and Security")}</h2>
+        <p>{t("Your booking information is stored locally and securely. We implement appropriate security measures to protect your personal information from unauthorized access, alteration, or disclosure.")}</p>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>4. Data Retention</h2>
-        <p>We retain your booking information for as long as necessary to fulfill the purposes outlined in this privacy policy, unless a longer retention period is required by law.</p>
+        <h2 style={subHeadingStyle}>{t("4. Data Retention")}</h2>
+        <p>{t("We retain your booking information for as long as necessary to fulfill the purposes outlined in this privacy policy, unless a longer retention period is required by law.")}</p>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>5. Third-Party Disclosure</h2>
-        <p>We do not sell, trade, or transfer your personal information to third parties. Your data is used solely for managing meal bookings at Mahaprasadam.</p>
+        <h2 style={subHeadingStyle}>{t("5. Third-Party Disclosure")}</h2>
+        <p>{t("We do not sell, trade, or transfer your personal information to third parties. Your data is used solely for managing meal bookings at Mahaprasadam.")}</p>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>6. Your Rights</h2>
-        <p>You have the right to:</p>
+        <h2 style={subHeadingStyle}>{t("6. Your Rights")}</h2>
+        <p>{t("You have the right to:")}</p>
         <ul style={listStyle}>
-          <li>Access your booking information</li>
-          <li>Request correction of inaccurate data</li>
-          <li>Request deletion of your data</li>
-          <li>Withdraw consent at any time</li>
+          <li>{t("Access your booking information")}</li>
+          <li>{t("Request correction of inaccurate data")}</li>
+          <li>{t("Request deletion of your data")}</li>
+          <li>{t("Withdraw consent at any time")}</li>
         </ul>
       </section>
 
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>7. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us:</p>
-        <p>Phone: +91 9748005891</p>
-        <p>Address: ISKCON Kalyani (B9/63 Kalyani)</p>
+        <h2 style={subHeadingStyle}>{t("7. Contact Us")}</h2>
+        <p>{t("If you have any questions about this Privacy Policy, please contact us:")}</p>
+        <p>{t("Phone: +91 9748005891")}</p>
+        <p>{t("Address: ISKCON Kalyani (B9/63 Kalyani)")}</p>
       </section>
     </div>
   );
