@@ -9,19 +9,6 @@ import { useTranslation } from 'react-i18next';
 const BookingForm = () => {
   const t = useTranslation().t
   const navigate = useNavigate();
-  const [showBookingForm, setShowBookingForm] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    date: '',
-    mealType: '',
-    persons: 1
-  });
-  
-
-  const [errors, setErrors] = useState({});
-  const [deadlineError, setDeadlineError] = useState('');
 
   const mealPrices = {
     Breakfast: 60,
@@ -35,169 +22,29 @@ const BookingForm = () => {
     Dinner: { hour: 18, minute: 0, label: '6:00 PM' }
   };
 
-  const checkDeadline = (selectedDate, mealType) => {
-    if (!selectedDate || !mealType) return true;
-
-    const selected = new Date(selectedDate);
-    const now = new Date();
-    
-    // If booking for today
-    if (selected.toDateString() === now.toDateString()) {
-      const deadline = mealDeadlines[mealType];
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
-      
-      if (currentHour > deadline.hour || 
-          (currentHour === deadline.hour && currentMinute >= deadline.minute)) {
-        setDeadlineError(
-          `Sorry! Booking deadline for ${mealType} has passed. Deadline is before ${deadline.label}.`
-        );
-        return false;
-      }
-    }
-    
-    setDeadlineError('');
-    return true;
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    
-    // Handle persons field - allow empty for editing, but store as number
-    let processedValue = value;
-    if (name === 'persons') {
-      // Allow empty string during editing
-      if (value === '') {
-        processedValue = '';
-      } else {
-        const num = parseInt(value);
-        processedValue = isNaN(num) ? 1 : Math.max(1, num);
-      }
-    }
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: processedValue
-    }));
-
-    // Check deadline when date or meal type changes
-    if (name === 'date' || name === 'mealType') {
-      const dateToCheck = name === 'date' ? value : formData.date;
-      const mealToCheck = name === 'mealType' ? value : formData.mealType;
-      checkDeadline(dateToCheck, mealToCheck);
-    }
-
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(formData.phone.trim())) {
-      newErrors.phone = 'Please enter a valid 10-digit phone number';
-    }
-
-    if (!formData.date) {
-      newErrors.date = 'Please select a date';
-    }
-
-    if (!formData.mealType) {
-      newErrors.mealType = 'Please select a meal type';
-    }
-
-    if (formData.persons < 1) {
-      newErrors.persons = 'Number of persons must be at least 1';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  
 
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
 
-    if (!checkDeadline(formData.date, formData.mealType)) {
-      return;
-    }
 
-    setIsSubmitting(true);
-
-    try {
-      // Ensure persons is a valid number
-      const persons = formData.persons === '' ? 1 : parseInt(formData.persons);
-      
-      // Calculate total amount
-      const totalAmount = mealPrices[formData.mealType] * persons;
-
-      // Prepare booking data
-      const bookingData = {
-        name: formData.name,
-        phone: formData.phone,
-        date: formData.date,
-        mealType: formData.mealType,
-        persons: persons,
-        totalAmount: totalAmount,
-        bookingTime: new Date().toISOString()
-      };
-
-      // Call API to create booking
-      const response = await createBooking(bookingData);
-
-      // Navigate to confirmation page with booking data
-      navigate('/confirm', {
-        state: {
-          bookingId: response.booking.booking_id,
-          name: response.booking.name,
-          phone: response.booking.phone,
-          date: response.booking.date,
-          mealType: response.booking.meal_type,
-          persons: response.booking.persons,
-          totalAmount: response.booking.total_amount,
-          time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-          status: response.booking.status,
-          savedToSheets: response.saved_to_sheets
-        }
-      });
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      alert('Failed to create booking: ' + error.message + '\nPlease try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
-  const totalAmount = formData.mealType 
-    ? mealPrices[formData.mealType] * (formData.persons || 1)
-    : 0;
 
-  const today = new Date().toISOString().split('T')[0];
-
-  const handleBookNowClick = () => {
-    setShowBookingForm(true);
-    setTimeout(() => {
-      document.querySelector('.booking-container')?.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }, 100);
+  const handleBookNowClick = (param) => {
+    if (param === 'english') {
+      window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
+    }
+    else if (param === 'hindi') {
+      window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
+    }
+    else if (param === 'bengali') {
+      window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
+    }
   };
 
   return (
@@ -210,8 +57,13 @@ const BookingForm = () => {
           }
         }
       `}</style>
-      <Card heading={t("ananda-title")} img={meal} style={{ width:'80%',}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
+      <Card heading={t("ananda-title")} img={meal} style={{ width:'80%'}} imgstyle={{margin:'0 1rem 0 0', maxWidth:'100%', maxHeight:'400px', objectFit:'contain', display:'block'}}>
         <p>{t("ananda-desc")}</p>
+
+
+        <div style={{display:'flex', alignItems:'flex-start', marginTop:'1rem', gap:'1rem'}}>
+          <div>
+                  
         <button 
           className="book-meal-btn"
           style={{
@@ -226,129 +78,61 @@ const BookingForm = () => {
             margin:'1rem 0 0 0',
             display: 'block'
           }} 
-          onClick={handleBookNowClick}
+          onClick={()=>handleBookNowClick('english')}
         >
-          {t("Book-button-1")}
+          Book Now
         </button>
-      </Card>
-      
-       
-        <div className="booking-container">
-          <div className="booking-card">
-        <h1><strong>{t("Book Your Meal")}</strong></h1>
-        <p className="subtitle">{t("Jagannath Mahaprasadam")}</p>
-
-        <form onSubmit={handleSubmit} >
-          {/* User Details Section */}
-          <div className="form-sections-wrapper">
-          <div className="form-section">
-            <h2>{t("Your Details")}</h2>
-            
-            <div className="form-group">
-              <label htmlFor="name">{t("Full Name")} *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder={t("Enter your full name")}
+          <p style={{textAlign:'center', padding:'0.5rem 0'}}>(English)</p>
+        </div>
+        <div>
+                  
+        <button 
+          className="book-meal-btn"
+          style={{
+            backgroundColor:'#7170d3ff', 
+            color:'white', 
+            padding:'0.75rem 1.5rem', 
+            border:'none', 
+            borderRadius:'5px', 
+            cursor:'pointer', 
+            fontSize:'1rem', 
+            fontWeight:'600', 
+            margin:'1rem 0 0 0',
+            display: 'block'
+          }} 
+          onClick={()=>handleBookNowClick('hindi')}
+        >
+          बुक करें
+        </button>
+          <p style={{textAlign:'center', padding:'0.5rem 0'}}>(हिंदी)</p>
+        </div>
+        <div>
+                  
+        <button 
+          className="book-meal-btn"
+          style={{
+            backgroundColor:'#7170d3ff', 
+            color:'white', 
+            padding:'0.75rem 1.5rem', 
+            border:'none', 
+            borderRadius:'5px', 
+            cursor:'pointer', 
+            fontSize:'1rem', 
+            fontWeight:'600', 
+            margin:'1rem 0 0 0',
+            display: 'block'
+          }} 
+          onClick={()=>handleBookNowClick('bengali')}
+        >
+          বুক করুন
+        </button>
+          <p style={{textAlign:'center', padding:'0.5rem 0'}}>(বাংলা)</p>
+        </div>
           
-              />
-              {errors.name && <span className="error">{errors.name}</span>}
-            </div>
+        </div>
 
-            <div className="form-group">
-              <label htmlFor="phone">{t("Phone Number")} *</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder={t("10-digit mobile number")}
-        
-              />
-              {errors.phone && <span className="error">{errors.phone}</span>}
-            </div>
-          </div>
-
-          {/* Booking Details Section */}
-          <div className="form-section">
-            <h2>{t("Meal Details")}</h2>
-
-            <div className="form-group">
-              <label htmlFor="date">{t("Select Date")} *</label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                value={formData.date}
-                onChange={handleInputChange}
-                min={today}
-              
-              />
-              {errors.date && <span className="error">{errors.date}</span>}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="mealType">{t("Meal Type")} *</label>
-              <select
-                id="mealType"
-                name="mealType"
-                value={formData.mealType}
-                onChange={handleInputChange}
-                
-              >
-                <option value="">{t("Select meal type")}</option>
-                <option value="Breakfast">{t("Breakfast")} (₹60)</option>
-                <option value="Lunch">{t("Lunch")} (₹90)</option>
-                <option value="Dinner">{t("Dinner")} (₹60)</option>
-              </select>
-              {errors.mealType && <span className="error">{errors.mealType}</span>}
-            </div>
-
-            {deadlineError && (
-              <div className="deadline-error">
-                {deadlineError}
-              </div>
-            )}
-              
-            <div className="form-group">
-              <label htmlFor="persons">{t("Number of Persons")} *</label>
-              <input
-                type="number"
-                id="persons"
-                name="persons"
-                value={formData.persons}
-                onChange={handleInputChange}
-                min="1"
-                
-              />
-              {errors.persons && <span className="error">{errors.persons}</span>}
-            </div>
-          </div>
-          </div>
-
-          {formData.mealType && (
-            <div className="price-summary">
-              <div className="price-row">
-                <span>{t("Price per person:")}</span>
-                <span>₹{mealPrices[formData.mealType]}</span>
-              </div>
-              <div className="price-row">
-                <span>{t("Number of persons:")}</span>
-                <span>{formData.persons}</span>
-              </div>
-              <div className="price-row total">
-                <span>{t("Total Amount:")}</span>
-                <span>₹{totalAmount}</span>
-              </div>
-            </div>
-          )}
-
-          {/* Booking Deadlines Info */}
-            <>
+         {/* Booking Deadlines Info */}
+            
               <div className="deadline-info">
                 <h3>{t("Booking Deadlines")}</h3>
                 <ul>
@@ -357,18 +141,10 @@ const BookingForm = () => {
                   <li><strong>{t("Dinner")}:</strong> {t("Book before time", {time:'6:00 PM'})}</li>
                 </ul>
               </div>
-
-              <button 
-                type="submit" 
-                className="btn btn-primary btn-block"
-                disabled={isSubmitting || !!deadlineError}
-              >
-                {isSubmitting ? 'Booking...' : t('Book-button-2')}
-              </button>
-            </>
-        </form>
-      </div>
-    </div>
+      </Card>
+      
+       
+      
       
     </>
   );

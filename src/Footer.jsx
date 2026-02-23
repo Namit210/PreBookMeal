@@ -56,7 +56,7 @@ export default function Footer(){
                     {[
                         { text: t('Book Meal'), link: '/' },
                         { text: t('rules'), link: '/help' },
-                        { text: t('Admin Panel'), link: '/admin-panel' }
+                        
                     ]}
                 </FootList>
                

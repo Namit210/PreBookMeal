@@ -75,7 +75,6 @@ const NavBar = () => {
 
         {/* Admin Panel and Language Switcher on the right */}
         <div className="desktop-menu" style={{display: 'flex', alignItems: 'center', gap: '1rem', flex: '0 0 auto'}}>
-          <Link to="/admin-panel" style={linkStyles}>{t("Admin Panel")}</Link>
           <div style={{display: 'flex', alignItems: 'center'}}>
             <LanguageSwitcher />
           </div>
@@ -109,7 +108,6 @@ const NavBar = () => {
       <div className="mobile-menu">
         <Link to="/" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>Book Meal</Link>
         <Link to="/help" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>Rules & Help</Link>
-        <Link to="/admin-panel" style={mobileLinkStyles} onClick={() => setMenuOpen(false)}>{t("Admin Panel")}</Link>
       </div>
     </nav>
   );
