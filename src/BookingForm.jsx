@@ -78,6 +78,28 @@ const BookingForm = () => {
             margin:'1rem 0 0 0',
             display: 'block'
           }} 
+          onClick={()=>handleBookNowClick('bengali')}
+        >
+          বুক করুন
+        </button>
+          <p style={{textAlign:'center', padding:'0.5rem 0'}}>(বাংলা)</p>
+        </div>
+          <div>
+                  
+        <button 
+          className="book-meal-btn"
+          style={{
+            backgroundColor:'#7170d3ff', 
+            color:'white', 
+            padding:'0.75rem 1.5rem', 
+            border:'none', 
+            borderRadius:'5px', 
+            cursor:'pointer', 
+            fontSize:'1rem', 
+            fontWeight:'600', 
+            margin:'1rem 0 0 0',
+            display: 'block'
+          }} 
           onClick={()=>handleBookNowClick('english')}
         >
           Book Now
@@ -105,28 +127,6 @@ const BookingForm = () => {
           बुक करें
         </button>
           <p style={{textAlign:'center', padding:'0.5rem 0'}}>(हिंदी)</p>
-        </div>
-        <div>
-                  
-        <button 
-          className="book-meal-btn"
-          style={{
-            backgroundColor:'#7170d3ff', 
-            color:'white', 
-            padding:'0.75rem 1.5rem', 
-            border:'none', 
-            borderRadius:'5px', 
-            cursor:'pointer', 
-            fontSize:'1rem', 
-            fontWeight:'600', 
-            margin:'1rem 0 0 0',
-            display: 'block'
-          }} 
-          onClick={()=>handleBookNowClick('bengali')}
-        >
-          বুক করুন
-        </button>
-          <p style={{textAlign:'center', padding:'0.5rem 0'}}>(বাংলা)</p>
         </div>
           
         </div>
