@@ -3,7 +3,6 @@ import {BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import NavBar from './NavBar'
 import BookingForm from './BookingForm'
 import Rule from './Rules'
-import BookingConfirmation from './confirmation'
 import Footer from './Footer'
 import PrivacyPolicy from './PrivacyPolicy'
 import TermsOfService from './TermsOfService'
@@ -16,7 +15,6 @@ function App() {
       <Routes>
         <Route path='/' element={<BookingForm />} />
         <Route path='/help' element={<Rule />} />
-        <Route path='/confirm' element={<BookingConfirmation />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='/terms-of-service' element={<TermsOfService />} />
         {/* Admin panel and dashboard routes removed */}

@@ -43,7 +43,7 @@ const BookingForm = () => {
       window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
     }
     else if (param === 'bengali') {
-      window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
+      window.location.href = "https://pages.razorpay.com/pl_SMSw5Sp4PiZSUv/view";
     }
   };
 
