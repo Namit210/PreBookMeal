@@ -77,16 +77,16 @@ export default function TermsOfService() {
       <section style={sectionStyle}>
         <h2 style={subHeadingStyle}>{t("9. Contact Information")}</h2>
         <p>{t("For questions or concerns about these Terms of Service, please contact us:")}</p>
-        <p>{t("Phone: +91 9748005891")}</p>
-        <p>{t("Address: ISKCON Kalyani (B9/63 Kalyani)")}</p>
+        <p>{t("Phone: +91 xxxxxxxxxx")}</p>
+        <p>{t("Address: abc)")}</p>
       </section>
 
-      <section style={sectionStyle}>
+      {/* <section style={sectionStyle}>
         <p style={{fontStyle: 'italic', color: '#666'}}>
           {t("Hare Krishna Hare Krishna Krishna Krishna Hare Hare")} <br />
           {t("Hare Rama Hare Rama Rama Rama Hare Hare")}
         </p>
-      </section>
+      </section> */}
     </div>
   );
 }

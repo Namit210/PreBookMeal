@@ -56,8 +56,8 @@ export default function PrivacyPolicy() {
       <section style={sectionStyle}>
         <h2 style={subHeadingStyle}>{t("7. Contact Us")}</h2>
         <p>{t("If you have any questions about this Privacy Policy, please contact us:")}</p>
-        <p>{t("Phone: +91 9748005891")}</p>
-        <p>{t("Address: ISKCON Kalyani (B9/63 Kalyani)")}</p>
+        <p>{t("Phone: +91 xxxxxxxxxx")}</p>
+        <p>{t("Address: abc")}</p>
       </section>
     </div>
   );

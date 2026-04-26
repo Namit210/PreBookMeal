@@ -62,7 +62,7 @@ export default function Footer(){
                
                 <FootList heading={t('Contact Us')} className="footer-section" style={{margin:'0 0 0 3rem'}}>
                     {[
-                        { text: t('Phone: +91 9748005891'), link: null },
+                        { text: t('Phone: +91 xxxxxxxxxx'), link: null },
                         { text: t('Address'), link: null }
                     ]}
                 </FootList>

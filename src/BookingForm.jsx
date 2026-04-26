@@ -35,17 +35,17 @@ const BookingForm = () => {
   };
 
 
-  const handleBookNowClick = (param) => {
-    if (param === 'english') {
-      window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
-    }
-    else if (param === 'hindi') {
-      window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
-    }
-    else if (param === 'bengali') {
-      window.location.href = "https://pages.razorpay.com/pl_SMSw5Sp4PiZSUv/view";
-    }
-  };
+  // const handleBookNowClick = (param) => {
+  //   if (param === 'english') {
+  //     window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
+  //   }
+  //   else if (param === 'hindi') {
+  //     window.location.href = "https://pages.razorpay.com/pl_SILI365QvaGala/view";
+  //   }
+  //   else if (param === 'bengali') {
+  //     window.location.href = "https://pages.razorpay.com/pl_SMSw5Sp4PiZSUv/view";
+  //   }
+  // };
 
   return (
     <>

@@ -28,7 +28,7 @@ export default function Rule(){
             <Notes heading='Special Booking Arrangements' type='disc'>
             {
                 {
-                    "Off-time Bookings":"For reservations outside regular hours, please contact our admin at +91 9748005891 to make special arrangements.",
+                    "Off-time Bookings":"For reservations outside regular hours, please contact our admin at +91 xxxxxxxxxx to make special arrangements.",
                     "Cash Bookings":"We facilitate cash bookings, which will be verified upon your arrival at the temple.",
                 }
             }
@@ -50,7 +50,7 @@ export default function Rule(){
             </Notes>
             <div
             style={{fontWeight:'bold', fontSize:'20px', paddingLeft:'1.5rem', color:'#3e41e4ff'}}
-            >{t("Admin Phone")}: +91 9748005891</div>
+            >{t("Admin Phone")}: +91 xxxxxxxxxx</div>
         </div>
         </div>
     )
